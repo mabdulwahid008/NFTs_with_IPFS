@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef } from 'react'
+import './App.css'
+import Web3Modal from 'web3modal'
+import { providers } from 'ethers'
 
 function App() {
+  const [walletConnected, setWalletConnected] = useState(false)
+
+  const web3ModalRef = useRef()
+
+  const getProviderOrSigner = async (needSigner = false) => {
+    const provider = web3ModalRef.current.connect()
+    const web3Provider = new providers.web3Provider(provider)
+
+    const { chainId } = await web3Provider.getNetwork();
+    if (chainId !== 80001) {
+      window.alert("Change the network to Mumbai");
+      throw new Error("Change network to Mumbai");
+    }
+
+    if (needSigner) {
+      const signer = web3Provider.getSigner();
+      return signer;
+    }
+    return web3Provider;
+  }
+  const connectWalledt = async() => {
+    try {
+      await getProviderOrSigner();
+      setWalletConnected(true)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if(!walletConnected){
+      web3ModalRef.current = new Web3Modal({
+        network: "mumbai",
+        providerOptions: {},
+        disableInjectedProvider: false
+      })
+      connectWalledt()
+    }
+  }, [])
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='main'>
+       <div>
+          <h1 className="title">Welcome to LW3Punks!</h1>
+          <div className="description">
+            Its an NFT collection for LearnWeb3 students.
+          </div>
+          <div className="description">
+            {/* {tokenIdsMinted}/10 have been minted */}
+          </div>
+          {/* {renderButton()} */}
+        </div>
+        <div>
+          <img className="image" src="./LW3punks/1.png" />
+        </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

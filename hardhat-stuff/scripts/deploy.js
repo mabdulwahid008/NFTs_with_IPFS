@@ -11,8 +11,7 @@ async function main() {
   await deployedLW3PunksContract.deployed()
 
   console.log("Address of LW3Punks Contract is ", deployedLW3PunksContract.address);
-
-
+  
 }
 
 main().catch((error) => {
