@@ -1,28 +1,46 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Contract, providers } from "ethers";
 import './App.css'
 import Web3Modal from 'web3modal'
-import { providers } from 'ethers'
+import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from './constants/index'
 
 function App() {
   const [walletConnected, setWalletConnected] = useState(false)
 
   const web3ModalRef = useRef()
 
+  const getTokenIds = async() => {
+    try {
+      // const provider = await getProviderOrSigner();
+
+      // const contract = new Contract(
+      //   NFT_CONTRACT_ADDRESS,
+      //   NFT_CONTRACT_ABI,
+      //   provider
+      // )
+
+      // const _tokenIds = await contract.tokenIds()
+      // console.log();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = web3ModalRef.current.connect()
     const web3Provider = new providers.web3Provider(provider)
 
-    const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 80001) {
-      window.alert("Change the network to Mumbai");
-      throw new Error("Change network to Mumbai");
-    }
+    // const { chainId } = await web3Provider.getNetwork();
+    // if (chainId !== 80001) {
+    //   window.alert("Change the network to Mumbai");
+    //   throw new Error("Change network to Mumbai");
+    // }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      return signer;
-    }
-    return web3Provider;
+    // if (needSigner) {
+    //   const signer = web3Provider.getSigner();
+    //   return signer;
+    // }
+    // return web3Provider;
   }
   const connectWalledt = async() => {
     try {
@@ -40,7 +58,7 @@ function App() {
         providerOptions: {},
         disableInjectedProvider: false
       })
-      connectWalledt()
+      // connectWalledt()
     }
   }, [])
   
